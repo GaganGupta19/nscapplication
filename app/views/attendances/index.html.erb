@@ -1,0 +1,75 @@
+<%- model_class = Attendance -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %> <span class="badge"><%= Attendance.count %></span></h1>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <%= form_tag pattendance_attendances_path, method: :put do %>
+      <% if coordinator_signed_in? || admin_signed_in? %>
+        <ul class="list-group">
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 1 , checked= "checked" %> Round 1</li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 2 %> Round 2  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 3 %> Round 3  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 4 %> Round 4  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 5 %> Round 5  </li>
+        </li>       
+        <li class="list-group-item">
+          <%= radio_button_tag "mark_present", "present" , checked= "checked" %> Present <br>
+          <%= radio_button_tag "mark_present", "absent" %>Absent 
+        </li><br>
+        <li class="list-group-item">
+        <%= submit_tag "Mark Attendance" %></li>
+      </ul>
+      <% end %>
+  </div>
+<div class="col-md-8">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Mark</th>
+      <th><%= model_class.human_attribute_name(:team_id) %> ID</th>
+      <th><%= model_class.human_attribute_name(:event_id) %> Name</th>
+      <th><%= model_class.human_attribute_name(:round) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @attendances.each do |attendance| %>
+      <tr>
+        <td><%= check_box_tag "a_ids[]", attendance.id %></td> 
+        <td><%= attendance.team_id %></td>
+        <td><%= attendance.event_id %></td>
+        <td><%= attendance.round %></td>
+        <td><%= attendance.status %></td>
+        <td>
+          <%if admin_signed_in? %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_attendance_path(attendance), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      attendance_path(attendance),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+                    
+          <%end%>
+          <%= link_to t('.show', :default => t("helpers.links.View details")),
+                      attendance, :class => 'btn btn-default btn-xs' %>  
+        
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>  
+<% end %>
+<%if admin_signed_in? %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_attendance_path,
+            :class => 'btn btn-primary' %>
+<%end%>

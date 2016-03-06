@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bvicam</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/welcome">National Students Convention</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      	<% if admin_signed_in? %>
+        	<li class="active"><%= link_to 'Participants', participants_path %><span class="sr-only">(current)</span></a></li>
+        	<li class="active"><%= link_to 'Teams', teams_path %><span class="sr-only">(current)</span></a></li>
+        	<li class="active"><%= link_to 'Attendance', attendances_path %><span class="sr-only">(current)</span></a></li> 
+        	<li class="active"><%= link_to 'Events', events_path %><span class="sr-only">(current)</span></a></li> 
+	    <% elsif reg_desk_signed_in? %>    
+	    	<li class="active"><%= link_to 'Participants', participants_path %> <span class="sr-only">(current)</span></a></li>
+	        <li class="active"><%= link_to 'Teams', teams_path %><span class="sr-only">(current)</span></a></li>
+		<% elsif coordinator_signed_in? %>    
+	    	<li class="active"><%= link_to 'Attendance', attendances_path %><span class="sr-only">(current)</span></a></li> 
+      	<%end%>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <% if admin_signed_in? %>
+  			<p class="navbar-text">Logged in as Admin <%= current_admin.email %></p>
+ 			<li class= "active"><%= link_to 'Logout', destroy_admin_session_path, method: :delete %></li>	
+		<% elsif reg_desk_signed_in? %>
+  			<p class="navbar-text">Logged in as <%= current_reg_desk.name %></p>
+ 			<li class="active"><%= link_to 'Logout', destroy_reg_desk_session_path, method: :delete %></li>
+		<% elsif coordinator_signed_in? %>
+	 		<p class="navbar-text">Logged in as <%= current_coordinator.name %></p>
+       		<li class="active"><%= link_to 'Logout', destroy_coordinator_session_path, method: :delete %></li>
+
+   	<% end %>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Your Role <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Registration Desk Sign in", new_participant_path %></li>
+            <li><%= link_to "Coordinator Sign in",  attendances_path %></li>
+            <li role="separator" class="divider"></li>
+            <li><%= link_to "About us",  about_welcome_index_path %></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">	
+    <% flash.each do |name,msg| %>
+      <div class="alert alert-<%= name == "notice" ? "success" : "danger" %>" role="alert">
+        <a class="close" data-dismiss="alert">x</a>
+        <%=msg%>
+      </div>
+    <%end%>
+
+	<div class="row">	
+		<div class="col-md-12">
+			<%= yield %>
+		</div>
+	</div>
+</div>
+	
+</body>
+</html>

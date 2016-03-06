@@ -1,0 +1,265 @@
+<p id="notice"><%= notice %></p>
+<% if admin_signed_in? %>
+<div id = "nav">
+  <i class="fa fa-chevron-left">
+    <%= link_to 'Participants', new_participant_path %>|
+  </i>
+    <%= link_to 'Teams', new_team_path %>
+    <i class="fa fa-chevron-right">
+    </i>
+      <%= link_to 'Attendances', attendances_path %>
+    <i class="fa fa-chevron-right"></i>
+</div>
+<% end %>
+
+<h1 id="container_header">Listing Attendances</h1>
+<div id="dynamic">
+<%= form_tag pattendance_attendances_path, method: :put do %>
+
+<% if coordinator_signed_in? || admin_signed_in? %>
+Round 1
+<%= radio_button_tag "round", 1 , checked= "checked" %>|
+Round 2
+<%= radio_button_tag "round", 2 %>|
+Round 3
+<%= radio_button_tag "round", 3 %>|
+Round 4
+<%= radio_button_tag "round", 4 %>|
+Round 5
+<%= radio_button_tag "round", 5 %><br><br>
+Present : 
+<%= radio_button_tag "mark_present", "present" , checked= "checked" %>|
+Absent  :
+<%= radio_button_tag "mark_present", "absent" %><br><br>
+<%= submit_tag "Mark Attendance" %> <br><br>
+<% end %>
+</div>
+<div id="tablebox">
+<table>
+  <thead>
+    <tr>
+      <th>Mark</th>
+      <th>Team ID</th>
+      <th>Event Name</th>
+      <th>Round</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>  
+  <tbody>
+    <% @attendances.each do |attendance| %>
+      <tr>
+        <td><%= check_box_tag "a_ids[]", attendance.id %></td> 
+        <td>T-<%= attendance.team.id %></td>
+        <td><%= attendance.event.name %></td>
+        <td><%= attendance.round %></td>
+        <td><%= attendance.status %></td>
+        <td><%= link_to 'Show', attendance %></td>
+        
+        <td><%= link_to 'Edit', edit_attendance_path(attendance) %></td>
+        <td><%= link_to 'Destroy', attendance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% end %>
+<br>
+----------------------------------------------------show page now ----------------------------------
+<p id="notice"><%= notice %></p>
+<div class= "container">
+
+<%= form_tag perattendance_attendances_path, method: :put do %>
+<% if coordinator_signed_in? || admin_signed_in? %>
+<br><br>
+Round 1
+<%= radio_button_tag "round", 1 , checked= "checked" %>|
+Round 2
+<%= radio_button_tag "round", 2 %>|
+Round 3
+<%= radio_button_tag "round", 3 %>|
+Round 4
+<%= radio_button_tag "round", 4 %>|
+Round 5
+<%= radio_button_tag "round", 5 %><br><br>
+Present : 
+<%= radio_button_tag "mark_present", "present" ,checked= "checked" %>|
+Absent  :
+<%= radio_button_tag "mark_present", "absent" %><br><br>
+<%= hidden_field_tag "aid", @attendance.id %>
+<%= submit_tag "Mark Attendance" %> <br><br>
+<% end %>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>id</th>
+      <th>PID</th>
+      <th>Name</th>
+      <th>Round</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if ParticipantAttendance.where(team_id: @attendance.team.try(:id),event_id: @attendance.event.try(:id)).exists? %>
+    <% @temp = ParticipantAttendance.where(team_id: @attendance.team.try(:id),event_id: @attendance.event.try(:id)) %>
+    <% @temp.each do |p| %>
+      <tr>
+        <td><%= check_box_tag "p_ids[]", p.try(:id) %></td> 
+        <td><%= p.id %></td>
+        <td><%= p.participant.id %></td>
+        <td><%= p.participant.name %></td>
+        <td><%= p.round %></td>
+        <td><%= p.status %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+<p>
+  <strong>Team ID:</strong>
+  <%= @attendance.team.id %>
+</p>
+  <strong>Participants in this team:</strong>
+  <ul>
+  <% @attendance.team.participants.each do |e| %>
+    <li>PID : <%= e.id %> || Name : <%= e.name %></li>
+  <% end %>
+  </ul>
+<p>
+  <strong>Event:</strong>
+  <%= @attendance.event.try(:name) %>
+</p>
+
+<p>
+  <strong>Round:</strong>
+  <%= @attendance.round %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @attendance.status %>
+</p>
+
+<div id="container_button">
+  <i class="fa fa-pencil-square-o">
+    <%= link_to 'Edit', edit_attendance_path(@attendance) %> </i>
+</div>
+<div id="container_button">
+  <i class="fa fa-undo"> 
+    <%= link_to 'Back', attendances_path %></i>
+</div>
+</div>
+----------------------------------------------------------------
+
+<dl class="dl-horizontal">
+<p>
+<strong>Team ID:</strong>
+  <%= @attendance.team.id %>
+</p>
+  <strong>Participants in this team:</strong>
+  <% @attendance.team.participants.each do |e| %>
+    <ul class="list-group">
+      <li class="list-group-item">
+      PID : P-<%= e.id %> | Name : <%= e.name %>
+    </li>
+  </ul>
+  <% end %>
+<p>
+  <strong>Event:</strong>
+  <%= @attendance.event.try(:name) %>
+</p>
+
+<p>
+  <strong>Round:</strong>
+  <%= @attendance.round %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @attendance.status %>
+</p>
+</dl>
+================================================================================================================================
+<%- model_class = Attendance -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <%= form_tag perattendance_attendances_path, method: :put do %>
+      <% if coordinator_signed_in? || admin_signed_in? %>
+        <ul class="list-group">
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 1 , checked= "checked" %> Round 1</li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 2 %> Round 2  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 3 %> Round 3  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 4 %> Round 4  </li>
+        <li class="list-group-item">
+        <%= radio_button_tag "round", 5 %> Round 5  </li>
+        </li> 
+        </ul>    
+        Present : 
+        <%= radio_button_tag "mark_present", "present" ,checked= "checked" %>|
+        Absent  :
+        <%= radio_button_tag "mark_present", "absent" %><br><br>
+        
+        <%= hidden_field_tag "aid", @attendance.id %>
+        <%= submit_tag "Mark Attendance" %>
+        <% end %>
+</div>
+
+<div class="col-md-8">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>PID</th>
+      <th>Name</th>
+      <th>Round</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if ParticipantAttendance.where(team_id: @attendance.team.try(:id),event_id: @attendance.event.try(:id)).exists? %>
+    <% @temp = ParticipantAttendance.where(team_id: @attendance.team.try(:id),event_id: @attendance.event.try(:id)) %>
+    <% @temp.each do |p| %>
+      <tr>
+        <td><%= check_box_tag "p_ids[]", p.try(:id) %></td> 
+        <td><%= p.id %></td>
+        <td><%= p.participant.id %></td>
+        <td><%= p.participant.name %></td>
+        <td><%= p.round %></td>
+        <td><%= p.status %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+</div>
+</div>
+
+<div class="row">
+  <div class="col-md-6"> 
+
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+              attendances_path, :class => 'btn btn-default'  %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_attendance_path(@attendance), :class => 'btn btn-default' %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              attendance_path(@attendance),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+  </div>
+</div>

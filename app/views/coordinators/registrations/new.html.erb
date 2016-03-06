@@ -1,0 +1,53 @@
+<div class="form-style-10">
+<h1>Sign up</h1>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="section"><span>1</span>Name</div>
+  <div class="inner-wrap">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+   <div class="section"><span>2</span>Roll Number</div>
+  <div class="inner-wrap">
+    <%= f.label :rollnumber %><br />
+    <%= f.text_field :rollnumber, autofocus: true %>
+  </div>
+
+  <div class="section"><span>3</span>Select Event</div>
+  <div class="inner-wrap">
+   <%= f.label :event_id, "Select Event" %><br />
+   <%= f.collection_select :event_id, Event.order(:name), :id, :name, {}, {multiple: false} %><br />
+  </div>
+  
+
+  <div class="section"><span>4</span>Email</div>
+  <div class="inner-wrap">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+   <div class="section"><span>5</span>Password</div>
+  <div class="inner-wrap">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <div class="section"><span>6</span>Confirm Password</div>
+  <div class="inner-wrap">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+
+  <div class="button-section"">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>
