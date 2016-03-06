@@ -35,7 +35,7 @@ gem 'devise'
 gem 'kaminari'
 gem 'chosen-rails'
 
-gem 'rb-inotify', '~> 0.9.6'
+gem 'rb-inotify', '~> 0.9.7'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
