@@ -1,30 +1,41 @@
-<div class="form-style-10">
-<h1>Log in</h1>
+<div class="row">
+  <div class="col-md-6">
+<h1>Admin Log in</h1>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-   <div class="section"><span>1</span>Email</div>
-  <div class="inner-wrap">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "form-horizontal sessions"}) do |f| %>
+  <div class="form-group">  
+    <%= f.label :email, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :email, :class => 'form-control' %>
+    </div>
+      <%=f.error_span(:email) %>
   </div>
 
-  <div class="section"><span>2</span>Password</div>
-  <div class="inner-wrap">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
+  <div class="form-group">  
+    <%= f.label :password, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.password_field :password, autocomplete: "off", :class => 'form-control' %>
+    </div>
+      <%=f.error_span(:password) %>
   </div>
 
   <% if devise_mapping.rememberable? -%>
-    <div class="field">
       <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
+      <%= f.label :remember_me , :class => 'control-label col-lg-2'%>
   <% end -%>
+  <br>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit 'Log In', :class => 'btn btn-primary' %>
+    </div>
   </div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+<% end %>
+</div>
+</div>
+<div class= "row">
+  <div class= "col-md-6">
+  <%= render "devise/shared/links" %>
+  </div>
 </div>

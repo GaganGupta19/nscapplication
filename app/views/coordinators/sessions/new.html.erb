@@ -1,3 +1,5 @@
+<div class="row">
+  <div class="col-md-6">
 <h1>Coordinator Log in</h1>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "form-horizontal sessions"}) do |f| %>
@@ -20,14 +22,20 @@
   <% if devise_mapping.rememberable? -%>
       <%= f.check_box :remember_me %>
       <%= f.label :remember_me , :class => 'control-label col-lg-2'%>
-    </div>
   <% end -%>
   <br>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <%= render "coordinators/shared/links" %><br><br>
       <%= f.submit 'Log In', :class => 'btn btn-primary' %>
     </div>
   </div>
+
 <% end %>
+</div>
+</div>
+<div class= "row">
+  <div class= "col-md-6">
+  <%= render "devise/shared/links" %>
+  </div>
+</div>
