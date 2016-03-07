@@ -18,7 +18,6 @@
         <%= radio_button_tag "round", 4 %> Round 4  </li>
         <li class="list-group-item">
         <%= radio_button_tag "round", 5 %> Round 5  </li>
-        </li> 
         </ul>    
         Present : 
         <%= radio_button_tag "mark_present", "present" ,checked= "checked" %>
@@ -26,11 +25,12 @@
         <%= radio_button_tag "mark_present", "absent" %><br><br>
         
         <%= hidden_field_tag "aid", @attendance.id %>
-        <%= submit_tag "Mark Attendance" %><br><br>
+        <%= submit_tag "Mark Attendance", data: { confirm: "Are you sure?"} %><br><br>
       <% end %>
-</div>
+  </div>
 
 <div class="col-md-8">
+<div class="table-responsive">  
 <table class="table table-hover">
   <thead>
     <tr>
@@ -48,7 +48,7 @@
     <% @temp = ParticipantAttendance.where(team_id: @attendance.team.try(:id),event_id: @attendance.event.try(:id)) %>
     <% @temp.each do |p| %>
       <tr>
-        <td><%= check_box_tag "p_ids[]", p.try(:id) %></td> 
+        <td><%= check_box_tag "p_ids[]", p.id %></td> 
         <td><%= p.id %></td>
         <td><%= p.participant.id %></td>
         <td><%= p.participant.name %></td>
@@ -59,8 +59,9 @@
     <% end %>
   </tbody>
 </table>
-<% end %>
 </div>
+</div>
+<% end %>
 </div>
 
 <div class="row">
@@ -70,10 +71,12 @@
               attendances_path, :class => 'btn btn-default'  %>
     <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_attendance_path(@attendance), :class => 'btn btn-default' %>
+    <% if admin_signed_in? %>
     <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               attendance_path(@attendance),
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
+    <% end %>
   </div>
 </div>

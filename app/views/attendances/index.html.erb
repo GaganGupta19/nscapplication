@@ -23,10 +23,11 @@
           <%= radio_button_tag "mark_present", "absent" %>Absent 
         </li><br>
         <li class="list-group-item">
-        <%= submit_tag "Mark Attendance" %></li>
+        <%= submit_tag "Mark Attendance" , data: { confirm: "Are you sure?" }%></li>
       </ul>
       <% end %>
   </div>
+<div class="table-responsive">  
 <div class="col-md-8">
 <table class="table table-hover">
   <thead>
@@ -66,6 +67,7 @@
     <% end %>
   </tbody>
 </table>
+</div>
 </div>  
 <% end %>
 <%if admin_signed_in? %>
