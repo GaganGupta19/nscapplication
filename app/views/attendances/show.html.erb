@@ -9,7 +9,7 @@
       <% if coordinator_signed_in? || admin_signed_in? %>
         <ul class="list-group">
         <li class="list-group-item">
-        <%= radio_button_tag "round", 1 , checked= "checked" %> Round 1</li>
+        <%= radio_button_tag "round", 1 , true %> Round 1</li>
         <li class="list-group-item">
         <%= radio_button_tag "round", 2 %> Round 2  </li>
         <li class="list-group-item">
@@ -20,7 +20,7 @@
         <%= radio_button_tag "round", 5 %> Round 5  </li>
         </ul>    
         Present : 
-        <%= radio_button_tag "mark_present", "present" ,checked= "checked" %>
+        <%= radio_button_tag "mark_present", "present" ,true %>
         Absent  :
         <%= radio_button_tag "mark_present", "absent" %><br><br>
         
@@ -30,7 +30,8 @@
   </div>
 
 <div class="col-md-8">
-<div class="table-responsive">  
+<div class="table-responsive"> 
+<div class="alert alert-danger" role="alert">Refresh the page before updating values</div> 
 <table class="table table-hover">
   <thead>
     <tr>

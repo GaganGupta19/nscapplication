@@ -3,12 +3,15 @@
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %> <span class="badge"><%= Attendance.count %></span></h1>
 </div>
 <div class="row">
+
+</div>
+<div class="row">
   <div class="col-md-4">
     <%= form_tag pattendance_attendances_path, method: :put do %>
       <% if coordinator_signed_in? || admin_signed_in? %>
         <ul class="list-group">
         <li class="list-group-item">
-        <%= radio_button_tag "round", 1 , checked= "checked" %> Round 1</li>
+        <%= radio_button_tag "round", 1 , true %> Round 1</li>
         <li class="list-group-item">
         <%= radio_button_tag "round", 2 %> Round 2  </li>
         <li class="list-group-item">
@@ -19,7 +22,7 @@
         <%= radio_button_tag "round", 5 %> Round 5  </li>
         </li>       
         <li class="list-group-item">
-          <%= radio_button_tag "mark_present", "present" , checked= "checked" %> Present <br>
+          <%= radio_button_tag "mark_present", "present" , true %> Present <br>
           <%= radio_button_tag "mark_present", "absent" %>Absent 
         </li><br>
         <li class="list-group-item">
@@ -29,6 +32,7 @@
   </div>
 <div class="table-responsive">  
 <div class="col-md-8">
+<div class="alert alert-danger" role="alert">Refresh the page before updating values</div>
 <table class="table table-hover">
   <thead>
     <tr>

@@ -68,6 +68,7 @@ class AttendancesController < ApplicationController
   end
   
   def perattendance
+    params[:p_ids] ||= []
     rval= params[:round]
     current_attendance = Attendance.find_by id: params[:aid]
     if params[:mark_present]=="present"
@@ -83,7 +84,8 @@ class AttendancesController < ApplicationController
   end  
 
   def pattendance
-    params[:a_ids]
+
+    params[:a_ids] ||=[]
     if params[:mark_present]=="present"
       Attendance.where(id: params[:a_ids]).update_all(status: 'Present', round: params[:round])
       team = Attendance.where(id: params[:a_ids]) 
