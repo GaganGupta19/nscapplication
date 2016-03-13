@@ -5,7 +5,7 @@ class ParticipantsController < ApplicationController
   # GET /participants
   # GET /participants.json
   def index
-    @participants = Participant.order(:id).page(params[:page]).per(5)
+    @participants = Participant.order(:id).page(params[:page]).per(10)
   end
 
   # GET /participants/1

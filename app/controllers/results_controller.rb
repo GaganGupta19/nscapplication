@@ -1,11 +1,12 @@
 class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin_coordinator!
   # GET /results
   # GET /results.json
   def index
     if coordinator_signed_in? 
       @user = current_coordinator
-      @results = Result.where(event_id: @user.event_id)
+      @results = Result.where(event_id: @user.event_id).order(round: :desc).page(params[:page]).per(5)
     else
       @results = Result.all
     end
@@ -65,6 +66,17 @@ class ResultsController < ApplicationController
     end
   end
 
+  def markresult
+    if Result.where(id: params[:r_id]).exists?
+      result_item = Result.find_by id: params[:r_id]
+      result_item.update(result_info: params[:result_info])
+      redirect_to results_path
+    #Result.where(id: params[:r_id]).update(result_info: params[:result_info])
+    else
+      redirect_to results_path
+    end
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_result
@@ -73,6 +85,6 @@ class ResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def result_params
-      params.require(:result).permit(:team_id, :event_id, :round)
+      params.require(:result).permit(:team_id, :event_id, :round, :result_info , params[:r_id], params[:result_info])
     end
 end

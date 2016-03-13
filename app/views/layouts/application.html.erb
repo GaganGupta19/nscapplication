@@ -36,13 +36,15 @@
       	<% if admin_signed_in? %>
         	<li class="active"><%= link_to 'Participants', participants_path %><span class="sr-only">(current)</span></a></li>
         	<li class="active"><%= link_to 'Teams', teams_path %><span class="sr-only">(current)</span></a></li>
-        	<li class="active"><%= link_to 'Attendance', attendances_path %><span class="sr-only">(current)</span></a></li> 
+        	<li class="active"><%= link_to 'Attendance', attendances_path %><span class="sr-only">(current)</span></a></li>
+          <li class="active"><%= link_to 'Results', results_path %><span class="sr-only">(current)</span></a></li>  
         	<li class="active"><%= link_to 'Events', events_path %><span class="sr-only">(current)</span></a></li> 
 	    <% elsif reg_desk_signed_in? %>    
 	    	<li class="active"><%= link_to 'Participants', participants_path %> <span class="sr-only">(current)</span></a></li>
 	        <li class="active"><%= link_to 'Teams', teams_path %><span class="sr-only">(current)</span></a></li>
 		<% elsif coordinator_signed_in? %>    
 	    	<li class="active"><%= link_to 'Attendance', attendances_path %><span class="sr-only">(current)</span></a></li> 
+        <li class="active"><%= link_to 'Results', results_path %><span class="sr-only">(current)</span></a></li> 
       	<%end%>
       </ul>
       <ul class="nav navbar-nav navbar-right">

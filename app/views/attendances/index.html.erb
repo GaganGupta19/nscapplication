@@ -1,6 +1,13 @@
 <%- model_class = Attendance -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %> <span class="badge"><%= Attendance.count %></span></h1>
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %> <span class="badge">
+    <%if coordinator_signed_in? %>
+    <% subcount = Attendance.where(event_id: current_coordinator.event_id) %>
+    <%= subcount.count %>
+    <% else %>
+    <%= Attendance.count %>
+    <% end %>
+  </span></h1>
 </div>
 <div class="row">
 
@@ -49,7 +56,8 @@
       <tr>
         <td><%= check_box_tag "a_ids[]", attendance.id %></td> 
         <td><%= attendance.team_id %></td>
-        <td><%= attendance.event_id %></td>
+        <% eventname= Event.find_by id: attendance.event_id %>
+        <td><%= eventname.name %></td>
         <td><%= attendance.round %></td>
         <td><%= attendance.status %></td>
         <td>

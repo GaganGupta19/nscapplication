@@ -7,7 +7,7 @@ class AttendancesController < ApplicationController
   def index
      if coordinator_signed_in? 
       @user = current_coordinator
-      @attendances = Attendance.where(event_id: @user.event_id).order(:id)
+      @attendances = Attendance.where(event_id: @user.event_id).order(round: :desc)
     else
       @attendances = Attendance.order(:id).page(params[:page]).per(10)
     end  

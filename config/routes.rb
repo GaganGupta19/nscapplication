@@ -3,7 +3,13 @@ Rails.application.routes.draw do
   devise_for :admins
   devise_for :reg_desks
   devise_for :coordinators
-  resources :results
+  
+  resources :results do 
+    collection do
+      put :markresult
+    end
+  end
+
   resources :welcome do
     collection do
       get :about

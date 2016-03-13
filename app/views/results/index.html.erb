@@ -1,31 +1,77 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Result -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<div class = "row">
+  <div class = "col-md-3 "> 
+    <%= form_tag markresult_results_path, method: :put do %>
+    <ul class="list-group">
+        <li class="list-group-item">
+      <%= radio_button_tag "result_info", "1st Position" , checked= "checked" %>  1st Position</li>
+      <li class="list-group-item">
+      <%= radio_button_tag "result_info", "2nd Position" %>  2nd Position</li>
+      <li class="list-group-item">
+      <%= radio_button_tag "result_info", "3rd Position" %>  3rd Position</li>
+      <li class="list-group-item">
+      <%= radio_button_tag "result_info", "" %>  Set Nil Position</li>
 
-<h1>Listing Results</h1>
+      <li class="list-group-item">
+      <%= submit_tag "Mark Result" %></li>
+      </ul> 
+  </div>
 
-<table class="CSSTableGenerator">
+  <div class = "col-md-8">
+<div class="table-responsive"> 
+<div class="alert alert-danger" role="alert">Refresh the page before updating values</div>  
+<%= paginate @results %>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Team ID</th>
-      <th>Event ID</th>
-      <th>Round</th>
-      <th colspan="3"></th>
+      <th></th>
+      <th><%= model_class.human_attribute_name(:team_id) %> ID</th>
+      <th><%= model_class.human_attribute_name(:event_id) %> Name </th>
+      <th><%= model_class.human_attribute_name(:round) %></th>
+      <th>Result</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+
     </tr>
   </thead>
-
   <tbody>
     <% @results.each do |result| %>
       <tr>
-        <td>T-<%= result.team_id %></td>
-        <td><%= result.event_id %></td>
+        <td><%= radio_button_tag "r_id", result.id %></td>
+        <td><%= result.team_id %></td>
+        <% if Event.where(id: result.event_id).exists? %>
+          <% eventname= Event.find_by id: result.event_id %>
+          <td><%= eventname.name %></td>
+          <% else %>
+          <td><%= result.event_id %></td>
+        <% end %>  
         <td><%= result.round %></td>
-        <td><%= link_to 'Show', result %></td>
-        <td><%= link_to 'Edit', edit_result_path(result) %></td>
-        <% if coordinator_signed_in? %>
-        <td><%= link_to 'Destroy', result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
+        <td><%= result.result_info %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.View details")),
+                      result, :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_result_path(result), :class => 'btn btn-default btn-xs' %>                          
+          <% if admin_signed_in? %>            
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      result_path(result),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
+</div>
+</div>
+<% end %>
+</div>
+<% if admin_signed_in? %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_result_path,
+            :class => 'btn btn-primary' %>
+<% end %> 
