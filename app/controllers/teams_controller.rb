@@ -20,14 +20,46 @@ class TeamsController < ApplicationController
 
   # GET /teams/1/edit
   def edit
+        
+    @p_name=Array.new
+    @e_name=Array.new
+    status = 0
+    
+    @team.participants.each do |p|
+      if ParticipantAttendance.where(participant_id: p.id).exists?
+        @team.events.each do|e|
+          if ParticipantAttendance.where(participant_id: p.id,event_id: e.id).exists?   
+            @p_name<<p.name
+            @e_name<<e.name
+            status = -1
+          end
+        end
+      end
+    end
   end
 
   # POST /teams
   # POST /teams.json
   def create
     @team = Team.new(team_params)
-    respond_to do |format|
-      if @team.save
+    @p_name=Array.new
+    @e_name=Array.new
+    status = 0
+    
+    @team.participants.each do |p|
+      if ParticipantAttendance.where(participant_id: p.id).exists?
+        @team.events.each do|e|
+          if ParticipantAttendance.where(participant_id: p.id,event_id: e.id).exists?   
+            @p_name<<p.name
+            @e_name<<e.name
+            status = -1
+          end
+        end
+      end
+    end
+
+  respond_to do |format|
+      if status == 0 &&  @team.save
         @team.events.each do |e|
           @team.participants.each do |p|
             @participant_attendance=ParticipantAttendance.create(team_id: @team.id,participant_id: p.id,event_id: e.id,status: "Absent")  
@@ -36,6 +68,7 @@ class TeamsController < ApplicationController
         format.html { redirect_to @team, notice: 'Team was successfully created.' }
         format.json { render :show, status: :created, location: @team }
       else
+        flash[:alert] = "Some of the participants are already in selected teams"     
         format.html { render :new }
         format.json { render json: @team.errors, status: :unprocessable_entity }
       end
@@ -45,8 +78,10 @@ class TeamsController < ApplicationController
   # PATCH/PUT /teams/1
   # PATCH/PUT /teams/1.json
   def update
+
+
     respond_to do |format|
-      if @team.update(team_params)
+      if status == 0 || @team.update(team_params)
         @team.events.each do |e|
           if !ParticipantAttendance.where(team_id: @team.id,event_id: e.id).exists?
             @team.participants.each do |p|
@@ -66,6 +101,7 @@ class TeamsController < ApplicationController
         format.json { render :show, status: :ok, location: @team }
       else
         format.html { render :edit }
+        flash[:alert] = "Some of the participants are already in selected teams" 
         format.json { render json: @team.errors, status: :unprocessable_entity }
       end
     end

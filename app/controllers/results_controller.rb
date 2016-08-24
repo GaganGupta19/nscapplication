@@ -6,9 +6,9 @@ class ResultsController < ApplicationController
   def index
     if coordinator_signed_in? 
       @user = current_coordinator
-      @results = Result.where(event_id: @user.event_id).order(round: :desc).page(params[:page]).per(5)
+      @results = Result.where(event_id: @user.event_id).order(round: :desc).page(params[:page]).per(10)
     else
-      @results = Result.all
+      @results = Result.order(:round).page(params[:page]).per(10)
     end
   end
 

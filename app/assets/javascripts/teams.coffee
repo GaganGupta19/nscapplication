@@ -5,3 +5,4 @@
 jQuery ->
 	$('#team_participant_ids').chosen()
 	$('#team_event_ids').chosen()
+

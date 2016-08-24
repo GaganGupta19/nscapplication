@@ -2,9 +2,6 @@ class Participant < ActiveRecord::Base
 	has_many :team_details
 	has_many :teams, through: :team_details
 
-	has_many :attendances
-	has_many :events, through: :attendances
-
 	validates :name, presence: true
 	validates :email,email: true
 	validates :phone,presence: true,
